@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 import torch
 from operator import itemgetter
-import matplotlib.pyplot as plt
 import os
 from shapely.geometry import Polygon
 from scipy import ndimage as ndi
