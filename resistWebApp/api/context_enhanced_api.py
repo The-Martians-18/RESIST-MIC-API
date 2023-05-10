@@ -694,7 +694,7 @@ def getSegmentationResult(imageName):
     res = makeMask(pros_res)
 
     # cv2.imwrite("api/results/processed_results.png", res)
-    deleteFiles([root + imageName, root + newImgName])
+    # deleteFiles([root + imageName, root + newImgName])
 
     _, img_encoded = cv2.imencode('.png', res)
 
@@ -704,14 +704,9 @@ def getSegmentationResult(imageName):
 
 
 
-# def getSegmentationResult(imageName):
-#     img = cv2.imread('processed_results1.png', cv2.IMREAD_GRAYSCALE)
-#     res = makeMask(img)
+def getTestImg(imageName):
+    root = "api/images/"
+    originalImage = cv2.imread(root + imageName)
+    _, img_encoded = cv2.imencode('.jpeg', originalImage)
 
-#     deleteFolder('Deprived-ESP_072116_1740_RED.small')
-#     deleteFolder('Extended-ESP_072116_1740_RED.small')
-
-
-#     _, img_encoded = cv2.imencode('.png', res)
-
-#     return img_encoded
+    return img_encoded

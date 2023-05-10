@@ -18,10 +18,15 @@ def getImage(request, image_id):
     # image_data = response.content
     # return HttpResponse(image_data, content_type='image/jpeg')
     # return response
-    link = getImgLink(image_id)
-    response = requests.get(link)
-    image_data = response.content
-    return HttpResponse(image_data, content_type='image/jpeg')
+
+    # link = getImgLink(image_id)
+    # response = requests.get(link)
+    # image_data = response.content
+
+    file_name = 'ESP_072116_1740_RED.small.jpg'
+    img_encoded = context_enhanced_api.getTestImg(file_name)
+    response = HttpResponse(img_encoded.tobytes(), content_type='image/jpeg')
+    return HttpResponse(img_encoded.tobytes(), content_type='image/jpeg')
 
 @api_view(['GET'])
 def getImageSegmentation(request, image_id):
@@ -36,6 +41,7 @@ def getImageSegmentation(request, image_id):
     with open(file_path, 'wb') as f:
         f.write(image_data)
     
+    file_name = 'ESP_072116_1740_RED.small.jpg'
     img_encoded = context_enhanced_api.getSegmentationResult(file_name)
     response = HttpResponse(img_encoded.tobytes(), content_type='image/png')
     return response
