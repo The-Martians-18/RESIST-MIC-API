@@ -26,7 +26,7 @@ def getImageDetails(request, image_id):
         latitude = latitude_match.group(1)
         longitude = longitude_match.group(1)
 
-    image = {'title': observation_title, 'link': link, 'latitude': latitude, 'longitude': longitude}
+    image = {'title': observation_title, 'image_id': image_id, 'latitude': latitude, 'longitude': longitude}
     return Response(image)
 
 
