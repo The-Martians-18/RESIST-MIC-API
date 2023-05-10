@@ -39,7 +39,11 @@ def getImage(request, image_id):
     link = getImgLink(image_id)
     response = requests.get(link)
     image_data = response.content
-    return HttpResponse(image_data, content_type='image/jpeg')
+    file_name = saveImage(image_id, image_data)
+    img_encoded = context_enhanced_api.getRotatedImage(file_name)
+    response = HttpResponse(img_encoded.tobytes(), content_type='image/jpeg')
+    return response
+    # return HttpResponse(image_data, content_type='image/jpeg')
 
 @api_view(['GET'])
 def getImageSegmentation(request, image_id):
@@ -48,19 +52,18 @@ def getImageSegmentation(request, image_id):
     # return Response(image_data)
     response = requests.get(link)
     image_data = response.content
-
-    file_name = f"{image_id}.jpg"
-    file_path = os.path.join("api\images", file_name)
-    with open(file_path, 'wb') as f:
-        f.write(image_data)
+    file_name = saveImage(image_id, image_data)
     
     img_encoded = context_enhanced_api.getSegmentationResult(file_name)
     response = HttpResponse(img_encoded.tobytes(), content_type='image/png')
     return response
 
-    return HttpResponse(image_data, content_type='image/jpeg')
-    image_data = {'id': image_id, 'link': link}
-    return Response(image_data)
+def saveImage(image_id, image_data):
+    file_name = f"{image_id}.jpg"
+    file_path = os.path.join("api\images", file_name)
+    with open(file_path, 'wb') as f:
+        f.write(image_data)
+    return file_name
 
 
 def getImgLink(id):

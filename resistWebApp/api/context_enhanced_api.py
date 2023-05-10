@@ -656,7 +656,8 @@ def getSegmentationResult(imageName):
     root = "api/images/"
     originalImage = cv2.imread(root + imageName)
     gray_image = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
-    histogramNormalizedImg = cv2.equalizeHist(gray_image)
+    rotated_image = cv2.rotate(gray_image, cv2.ROTATE_180)
+    histogramNormalizedImg = cv2.equalizeHist(rotated_image)
     newImgName = 'histogramNormalized_'+ imageName
     cv2.imwrite(root + newImgName, histogramNormalizedImg)
     
@@ -700,17 +701,12 @@ def getSegmentationResult(imageName):
     return img_encoded
 
 
+def getRotatedImage(imageName):
+    root = "api/images/"
+    originalImage = cv2.imread(root + imageName)
+    gray_image = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+    rotated_image = cv2.rotate(gray_image, cv2.ROTATE_180)
+    _, img_encoded = cv2.imencode('.jpeg', rotated_image)
+    deleteFiles([root + imageName])
 
-
-
-# def getSegmentationResult(imageName):
-#     img = cv2.imread('processed_results1.png', cv2.IMREAD_GRAYSCALE)
-#     res = makeMask(img)
-
-#     deleteFolder('Deprived-ESP_072116_1740_RED.small')
-#     deleteFolder('Extended-ESP_072116_1740_RED.small')
-
-
-#     _, img_encoded = cv2.imencode('.png', res)
-
-#     return img_encoded
+    return img_encoded
