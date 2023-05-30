@@ -5,37 +5,15 @@ import requests
 from django.http import HttpResponse
 import os
 from . import context_enhanced_api
-from bs4 import BeautifulSoup
-import re
+from . import imagesInBoundary, imageDetails
 
 @api_view(['GET'])
 def getImageDetails(request, image_id):
-    link = f'https://www.uahirise.org/{image_id}'
-    response = requests.get(link)
-
-    html_content = response.text
-    soup = BeautifulSoup(html_content, 'html.parser')
-    observation_title = soup.find('span', class_='observation-title-milo').text
-
-    latitude_pattern = r'Latitude \(centered\)<\/strong><br \/>(-?\d+\.\d+)&deg;'
-    longitude_pattern = r'Longitude \(East\)<\/strong><br \/>(-?\d+\.\d+)&deg;'
-    latitude_match = re.search(latitude_pattern, html_content)
-    longitude_match = re.search(longitude_pattern, html_content)
-
-    if latitude_match and longitude_match:
-        latitude = latitude_match.group(1) + '°'
-        longitude = longitude_match.group(1) + '°'
-
-    image = {'title': observation_title, 'image_id': image_id, 'latitude': latitude, 'longitude': longitude}
-    return Response(image)
-
+    imageDeets = imageDetails.getImageDetails(image_id)
+    return Response(imageDeets)
 
 @api_view(['GET'])
 def getImage(request, image_id):
-    # response = requests.get('https://hirise-pds.lpl.arizona.edu/PDS/EXTRAS/RDR/ESP/ORB_016900_016999/ESP_016934_1770/ESP_016934_1770_RED.NOMAP.browse.jpg?=&=')
-    # image_data = response.content
-    # return HttpResponse(image_data, content_type='image/jpeg')
-    # return response
     link = getImgLink(image_id)
     response = requests.get(link)
     image_data = response.content
@@ -43,13 +21,10 @@ def getImage(request, image_id):
     img_encoded = context_enhanced_api.getRotatedImage(file_name)
     response = HttpResponse(img_encoded.tobytes(), content_type='image/jpeg')
     return response
-    # return HttpResponse(image_data, content_type='image/jpeg')
 
 @api_view(['GET'])
 def getImageSegmentation(request, image_id):
     link = getImgLink(image_id)
-    # image_data = {'id': image_id, 'link': link}
-    # return Response(image_data)
     response = requests.get(link)
     image_data = response.content
     file_name = saveImage(image_id, image_data)
@@ -65,7 +40,6 @@ def saveImage(image_id, image_data):
         f.write(image_data)
     return file_name
 
-
 def getImgLink(id):
     idSegments = id.split('_')
     link = ''
@@ -75,3 +49,12 @@ def getImgLink(id):
         upperBound = idSegments[1][:4] + '99'
         link = f'https://hirise-pds.lpl.arizona.edu/PDS/EXTRAS/RDR/{imgType}/ORB_{lowerBound}_{upperBound}/{id}/{id}_RED.NOMAP.browse.jpg?=&='
     return link
+
+@api_view(['POST'])
+def getImagesInBoundary(request):
+    json_data = request.data
+    # Access the JSON data
+    images = imagesInBoundary.scrapeImageData(json_data)
+    boundaries = {'images': images}
+
+    return Response(boundaries)
