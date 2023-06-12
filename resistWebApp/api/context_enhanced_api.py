@@ -674,30 +674,19 @@ def getSegmentationResult(imageName):
 
     image_boxes, medianFilterPredictions = getImageBoxes(filteredPredictions)
 
-    if (len(image_boxes) > 1):
+    image_boxes_copies = getExtendedBoxes(image_boxes)
 
-        image_boxes_copies = getExtendedBoxes(image_boxes)
+    not_accepted_contours = checkContourAcceptance(image_boxes_copies)
 
-        not_accepted_contours = checkContourAcceptance(image_boxes_copies)
+    copyiess = applyBoundingBoxOverlap(medianFilterPredictions, not_accepted_contours, image_boxes_copies)
 
-        copyiess = applyBoundingBoxOverlap(medianFilterPredictions, not_accepted_contours, image_boxes_copies)
+    skeletons = getSkeltons(copyiess)
 
-        skeletons = getSkeltons(copyiess)
+    processed_results = applyGapAndInteriorFilling(skeletons, copyiess)
 
-        processed_results = applyGapAndInteriorFilling(skeletons, copyiess)
-
-        pros_res = processed_results[0]
-        pros_res[pros_res < 0.5] = 255
-        pros_res[pros_res < 2] = 0
-
-    else:
-
-        processed_results = medianFilterPredictions
-
-        pros_res = processed_results[0]
-        pros_res[pros_res < 0.5] = 255
-        pros_res[pros_res < 2] = 0
-        pros_res[pros_res > 2] = 1
+    pros_res = processed_results[0]
+    pros_res[pros_res < 0.5] = 255
+    pros_res[pros_res < 2] = 0
 
     # cv2.imwrite("api/results/processed_results1.png", pros_res)
     # k = cv2.imread('api/results/processed_results.png')
