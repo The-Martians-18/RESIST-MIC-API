@@ -1,7 +1,33 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 from urllib.parse import urlparse, parse_qs
-from . import imageDetails
+
+def getImageDetails(image_id):
+    link = f'https://www.uahirise.org/{image_id}'
+    response = requests.get(link)
+    html_content = response.text
+
+    invalid_page_content = '<div class=\'milo-container-en\'>'
+    if invalid_page_content in html_content:
+        # Return an error response or message indicating that the image ID is invalid
+        error_message = 'Invalid image ID.'
+        return {'error': error_message}
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+    observation_title = soup.find('span', class_='observation-title-milo').text
+
+    latitude_pattern = r'Latitude \(centered\)<\/strong><br \/>(-?\d+\.\d+)&deg;'
+    longitude_pattern = r'Longitude \(East\)<\/strong><br \/>(-?\d+\.\d+)&deg;'
+    latitude_match = re.search(latitude_pattern, html_content)
+    longitude_match = re.search(longitude_pattern, html_content)
+
+    if latitude_match and longitude_match:
+        latitude = latitude_match.group(1) + '°'
+        longitude = longitude_match.group(1) + '°'
+
+    imageDeets = {'title': observation_title, 'image_id': image_id, 'latitude': latitude, 'longitude': longitude}
+    return imageDeets
 
 def find_href_values(obj, results):
     if isinstance(obj, dict):
@@ -60,7 +86,7 @@ def scrapeImages(link, pageNum, maxPage, images):
         if imageId[:8] == "/results":
             twoLinks.append(imageId)
         else:
-            imageDeets = imageDetails.getImageDetails(imageId)
+            imageDeets = getImageDetails(imageId)
             thumbnailLink = findLinkById(thmubnailLinks_raw, imageId)
             imageDeets["thumbnailLink"] = thumbnailLink
             images.append(imageDeets)
@@ -85,4 +111,21 @@ def getImagesLink(json_data):
     longitude_beginning = json_data.get('longitude_beginning')
     longitude_ending = json_data.get('longitude_ending')
     link = f'https://www.uahirise.org/results.php?keyword=&longitudes=&lon_beg={longitude_beginning}&lon_end={longitude_ending}&latitudes=&lat_beg={latitude_beginning}&lat_end={latitude_ending}&solar_all=true&solar_spring=false&solar_summer=false&solar_fall=false&solar_winter=false&solar_equinox=false&solar_equinox_dist=5&solar_solstice=false&solar_solstice_dist=5&solar_beg=&solar_end=&image_all=true&image_anaglyphs=false&image_dtm=false&image_caption=false&order=WP.release_date&science_theme=&page='
+    return link
+
+def saveImage(image_id, image_data):
+    file_name = f"{image_id}.jpg"
+    file_path = os.path.join("api\images", file_name)
+    with open(file_path, 'wb') as f:
+        f.write(image_data)
+    return file_name
+
+def getImgLink(id):
+    idSegments = id.split('_')
+    link = ''
+    if len(idSegments) > 1:
+        imgType = idSegments[0]
+        lowerBound = idSegments[1][:4] + '00'
+        upperBound = idSegments[1][:4] + '99'
+        link = f'https://hirise-pds.lpl.arizona.edu/PDS/EXTRAS/RDR/{imgType}/ORB_{lowerBound}_{upperBound}/{id}/{id}_RED.NOMAP.browse.jpg?=&='
     return link
