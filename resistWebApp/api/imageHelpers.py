@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import urlparse, parse_qs
+import os
 
 def getImageDetails(image_id):
     link = f'https://www.uahirise.org/{image_id}'
