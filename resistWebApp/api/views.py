@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 import requests
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
-import os
 from . import context_enhanced_api, imageHelpers
 
 @api_view(['GET'])
