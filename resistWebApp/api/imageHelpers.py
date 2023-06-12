@@ -30,17 +30,6 @@ def getImageDetails(image_id):
     imageDeets = {'title': observation_title, 'image_id': image_id, 'latitude': latitude, 'longitude': longitude}
     return imageDeets
 
-# def find_href_values(obj, results):
-#     if isinstance(obj, dict):
-#         for key, value in obj.items():
-#             if key == "@href":
-#                 results.add(value)
-#             elif isinstance(value, (dict, list)):
-#                 find_href_values(value, results)
-#     elif isinstance(obj, list):
-#         for item in obj:
-#             find_href_values(item, results)
-
 def getMaxPagenumber(twolinks):
     max_page_number = -1
     for link in twolinks:
