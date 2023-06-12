@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.test import APIClient
 from unittest.mock import patch
 from . import imageHelpers
+import json
 
 class ImageViewTests(TestCase):
     def setUp(self):
@@ -45,6 +47,60 @@ class ImageViewTests(TestCase):
         self.assertEqual(invalid_response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(invalid_response.data['error'], invalid_expected_response['error'])
 
+    @patch('api.views.getImage')
+    def test_get_image(self, mock_get_image):
+        valid_image_id = "ESP_072116_1740"
+        invalid_image_id = "ESP_072116_1940"
+
+        valid_expected_response = HttpResponse(b'', content_type='image/jpeg')
+
+        invalid_expected_response = {
+            "error": "Image not found. Invalid image ID."
+        }
+
+        # Mock the getImageDetails function to return the expected responses
+        mock_get_image.side_effect = [valid_expected_response, invalid_expected_response]
+
+        # Test for valid image ID
+        valid_url = reverse('get_image', args=[valid_image_id])
+        valid_response = self.client.get(valid_url)
+
+        self.assertEqual(valid_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(valid_response['Content-Type'], valid_expected_response['Content-Type'])
+        # self.assertEqual(len(valid_response.content), len(valid_expected_response.content))
+
+        # Test for invalid image ID
+        invalid_url = reverse('get_image', args=[invalid_image_id])
+        invalid_response = self.client.get(invalid_url)
+
+        self.assertEqual(invalid_response.status_code, status.HTTP_404_NOT_FOUND)
+        content = json.loads(invalid_response.content)
+        self.assertEqual(content['error'], invalid_expected_response['error'])
+
+    @patch('api.views.getImageDetails')
+    def test_get_image_segmentation(self, mock_get_image_segmentation):
+        valid_image_id = "ESP_072116_1740"
+        invalid_image_id = "ESP_072116_1940"
+
+        valid_expected_response = HttpResponse(b'', content_type='image/jpeg')
+
+        invalid_expected_response = {
+            "error": "Image not found. Invalid image ID."
+        }
+
+        # Mock the getImageDetails function to return the expected responses
+        mock_get_image_segmentation.side_effect = [valid_expected_response, invalid_expected_response]
+
+        # Test for valid image ID
+
+        # Test for invalid image ID
+        invalid_url = reverse('get_image_segmentation', args=[invalid_image_id])
+        invalid_response = self.client.get(invalid_url)
+
+        self.assertEqual(invalid_response.status_code, status.HTTP_404_NOT_FOUND)
+        content = json.loads(invalid_response.content)
+        self.assertEqual(content['error'], invalid_expected_response['error'])
+    
     @patch('api.views.imageHelpers.scrapeImageData')
     def test_get_images_in_boundary(self, mock_scrape_image_data):
         # Define the expected response
