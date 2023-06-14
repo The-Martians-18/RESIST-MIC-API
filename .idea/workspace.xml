@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d10a0f7-22d5-4001-af70-53a8e65ebf85" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/RESIST-MIC-API.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RESIST-MIC-API.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resistWebApp/api/tests/images/segmented_image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resistWebApp/api/tests/images/test_rotated_image.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resistWebApp/api/tests/images/test_rotation.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resistWebApp/api/tests/images/test_segmentation.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/resistWebApp/api/tests/test_context_enhanced_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/resistWebApp/api/tests/test_context_enhanced_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,9 +61,54 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for test_context_enhanced_api.TestDeleteFolder" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="RESIST-MIC-API" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/resistWebApp/api/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_context_enhanced_api.TestDeleteFolder&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_context_enhanced_api.TestGetRotatedImage" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="RESIST-MIC-API" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/resistWebApp/api/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_context_enhanced_api.TestGetRotatedImage&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_context_enhanced_api.TestGetSegmentationResult" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="RESIST-MIC-API" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/resistWebApp/api/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_context_enhanced_api.TestGetSegmentationResult&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_context_enhanced_api.TestDeleteFolder" />
+        <item itemvalue="Python tests.Python tests for test_context_enhanced_api.TestGetRotatedImage" />
         <item itemvalue="Python tests.Python tests for test_context_enhanced_api.TestDeleteFiles" />
+        <item itemvalue="Python tests.Python tests for test_context_enhanced_api.TestGetSegmentationResult" />
       </list>
     </recent_temporary>
   </component>
@@ -92,8 +139,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/resistWebApp/api/tests/test_context_enhanced_api.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="42" />
+          <line>68</line>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/resistWebApp/api/tests/test_context_enhanced_api.py</url>
+          <line>97</line>
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
