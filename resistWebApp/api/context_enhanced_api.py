@@ -578,11 +578,10 @@ def getContextExtendedMask(image, folderNameExtended, clientExtended):
     print("extended process ended")
     return [mask_exten]
 
-def getContextDeprivedMask_helper(imageName):
+def getContextDeprivedMask_helper(imageName, root = "api/images/"):
     # call your original function here with arguments that can be pickled
     # imageName = "ESP_077800_1800.jpg"
     print(imageName, 'getContextDeprivedMask_helper')
-    root = "api/images/"
     image = cv2.imread(root + imageName)
 
     folderNameDeprived = './Deprived-' + imageName[:-4]
@@ -594,11 +593,10 @@ def getContextDeprivedMask_helper(imageName):
 
     return getContextDeprivedMask(image, folderNameDeprived, clientDeprived)
 
-def getContextExtendedMask_helper(imageName):
+def getContextExtendedMask_helper(imageName, root = "api/images/"):
     # call your original function here with arguments that can be pickled
     # imageName = "ESP_077800_1800.jpg"
     print(imageName, 'getContextExtendedMask_helper')
-    root = "api/images/"
     image = cv2.imread(root + imageName)
 
     folderNameExtended = './Extended-' + imageName[:-4]
@@ -652,8 +650,7 @@ def deleteFiles(fileList):
         os.remove(file)
 
 
-def getSegmentationResult(imageName):
-    root = "api/images/"
+def getSegmentationResult(imageName, root = "api/images/"):
     originalImage = cv2.imread(root + imageName)
     gray_image = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
     rotated_image = cv2.rotate(gray_image, cv2.ROTATE_180)
@@ -663,8 +660,8 @@ def getSegmentationResult(imageName):
     
     with concurrent.futures.ProcessPoolExecutor() as executor:
         # submit the helper functions to the executor
-        future1 = executor.submit(getContextDeprivedMask_helper, newImgName)
-        future2 = executor.submit(getContextExtendedMask_helper, newImgName)
+        future1 = executor.submit(getContextDeprivedMask_helper, newImgName, root)
+        future2 = executor.submit(getContextExtendedMask_helper, newImgName, root)
 
         # wait for the results to come back
         maskDeprived = future1.result()
@@ -691,6 +688,9 @@ def getSegmentationResult(imageName):
     # cv2.imwrite("api/results/processed_results1.png", pros_res)
     # k = cv2.imread('api/results/processed_results.png')
 
+    # save the image for testing of segmentation
+    # cv2.imwrite("segmented_image.png", pros_res)
+
     res = makeMask(pros_res)
 
     # cv2.imwrite("api/results/processed_results.png", res)
@@ -701,8 +701,7 @@ def getSegmentationResult(imageName):
     return img_encoded
 
 
-def getRotatedImage(imageName):
-    root = "api/images/"
+def getRotatedImage(imageName, root = "api/images/"):
     originalImage = cv2.imread(root + imageName)
     gray_image = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
     rotated_image = cv2.rotate(gray_image, cv2.ROTATE_180)
