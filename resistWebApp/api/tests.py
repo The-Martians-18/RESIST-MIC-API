@@ -7,6 +7,8 @@ from unittest.mock import patch
 from . import imageHelpers
 import json
 
+# coverage run --source "api"  manage.py test -v 2 && coverage report && coverage html
+
 class ImageViewTests(TestCase):
     def setUp(self):
         self.client = APIClient()
