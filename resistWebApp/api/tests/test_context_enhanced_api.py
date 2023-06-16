@@ -9,7 +9,7 @@ import torch
 sys.path.insert(0, "../")
 
 
-from context_enhanced_api import getRotatedImage, getSegmentationResult, deleteFiles, deleteFolder, makeMask, getContextExtendedMask_helper, getContextDeprivedMask_helper
+from context_enhanced_api import getRotatedImage, getSegmentationResult, deleteFiles, deleteFolder, makeMask, getContextExtendedMask_helper, getContextDeprivedMask_helper, isConnected
 
 # Test 1
 class TestGetSegmentationResult(unittest.TestCase):
@@ -195,6 +195,17 @@ class TestGetContextDeprivedMaskHelper(unittest.TestCase):
         # Clean up the test image and rotated image
         os.remove(self.root_path + self.image_name)
         os.remove(self.root_path + self.helpered_image)
+
+# Test 8
+class TestIsConnected(unittest.TestCase):
+
+    def test_is_connected(self):
+        connections = [(1, 2), (2, 3), (3, 4), (4, 5)]
+
+        self.assertTrue(isConnected(1, 5, connections))
+        self.assertTrue(isConnected(2, 4, connections))
+        self.assertFalse(isConnected(1, 6, connections))
+        self.assertFalse(isConnected(3, 6, connections))
 
 if __name__ == '__main__':
     unittest.main()

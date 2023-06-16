@@ -110,7 +110,7 @@ class ImageViewTests(TestCase):
         self.assertEqual(invalid_response.status_code, status.HTTP_404_NOT_FOUND)
         content = json.loads(invalid_response.content)
         self.assertEqual(content['error'], invalid_expected_response['error'])
-    
+
     @patch('api.views.imageHelpers.scrapeImageData')
     def test_get_images_in_boundary(self, mock_scrape_image_data):
         # Define the expected response
@@ -257,7 +257,7 @@ class ImageHelpersTestCase(TestCase):
         max_page_number = imageHelpers.getMaxPagenumber(twolinks)
 
         self.assertEqual(max_page_number, expected_max_page_number)
-    
+
     def test_findLinkById(self):
         link_list = [
             'https://static.uahirise.org/images/2010/thumb/PSP_001374_1805.jpg',
@@ -277,7 +277,7 @@ class ImageHelpersTestCase(TestCase):
         # Test case for id that does not exist in the link_list
         result_not_exists = imageHelpers.findLinkById(link_list, id_not_exists)
         self.assertIsNone(result_not_exists)
-    
+
     def test_scrapeImages(self):
         link = 'https://www.uahirise.org/results.php?keyword=&longitudes=&lon_beg=7&lon_end=8&latitudes=&lat_beg=0&lat_end=1&solar_all=true&solar_spring=false&solar_summer=false&solar_fall=false&solar_winter=false&solar_equinox=false&solar_equinox_dist=5&solar_solstice=false&solar_solstice_dist=5&solar_beg=&solar_end=&image_all=true&image_anaglyphs=false&image_dtm=false&image_caption=false&order=WP.release_date&science_theme=&page='
         pageNum = 1
@@ -297,7 +297,7 @@ class ImageHelpersTestCase(TestCase):
             self.assertEqual(image['latitude'], expected_image['latitude'])
             self.assertEqual(image['longitude'], expected_image['longitude'])
             self.assertEqual(image['thumbnailLink'], expected_image['thumbnailLink'])
-    
+
     def test_scrapeImageData(self):
 
         images = imageHelpers.scrapeImageData(self.json_data)
@@ -312,7 +312,7 @@ class ImageHelpersTestCase(TestCase):
             self.assertEqual(matching_image["latitude"], expected_image["latitude"])
             self.assertEqual(matching_image["longitude"], expected_image["longitude"])
             self.assertEqual(matching_image["thumbnailLink"], expected_image["thumbnailLink"])
-    
+
     def test_getImagesLink(self):
 
         expected_link = "https://www.uahirise.org/results.php?keyword=&longitudes=&lon_beg=7&lon_end=8&latitudes=&lat_beg=0&lat_end=1&solar_all=true&solar_spring=false&solar_summer=false&solar_fall=false&solar_winter=false&solar_equinox=false&solar_equinox_dist=5&solar_solstice=false&solar_solstice_dist=5&solar_beg=&solar_end=&image_all=true&image_anaglyphs=false&image_dtm=false&image_caption=false&order=WP.release_date&science_theme=&page="
@@ -509,3 +509,14 @@ class TestGetContextDeprivedMaskHelper(TestCase):
         # Clean up the test image and rotated image
         os.remove(self.root_path + self.image_name)
         os.remove(self.root_path + self.helpered_image)
+
+
+class TestIsConnected(TestCase):
+
+    def test_is_connected(self):
+        connections = [(1, 2), (2, 3), (3, 4), (4, 5)]
+
+        self.assertTrue(context_enhanced_api.isConnected(1, 5, connections))
+        self.assertTrue(context_enhanced_api.isConnected(2, 4, connections))
+        self.assertFalse(context_enhanced_api.isConnected(1, 6, connections))
+        self.assertFalse(context_enhanced_api.isConnected(3, 6, connections))
