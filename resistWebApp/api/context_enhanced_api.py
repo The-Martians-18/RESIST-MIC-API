@@ -556,6 +556,9 @@ def getContextDeprivedMask(image, folderNameDeprived, clientDeprived):
     mask_dep = reconstructImage(predictionsDeprived[0], 1)
     mask_dep[mask_dep < 0.5] = 255
     mask_dep[mask_dep < 2] = 0
+    # Get the image for validation in the test TestGetContextDeprivedMaskHelper
+    # tensor_umat = mask_dep.numpy()
+    # cv2.imwrite('test_cdm_helpered_image.png', tensor_umat)
     deleteFolder(folderNameDeprived)
     print("deprived process ended")
     return [mask_dep]
@@ -574,6 +577,9 @@ def getContextExtendedMask(image, folderNameExtended, clientExtended):
     mask_exten = reconstructImage(predictionsExtended[0], 1)
     mask_exten[mask_exten < 0.5] = 255
     mask_exten[mask_exten < 2] = 0
+    # Get the image for validation in the test TestGetContextExtendedMaskHelper
+    # tensor_umat = mask_exten.numpy()
+    # cv2.imwrite('mask_exten.png', tensor_umat)
     deleteFolder(folderNameExtended)
     print("extended process ended")
     return [mask_exten]

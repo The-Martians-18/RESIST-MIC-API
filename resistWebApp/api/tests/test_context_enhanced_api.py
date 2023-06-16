@@ -4,11 +4,12 @@ import unittest
 import sys
 import numpy as np
 import shutil
+import torch
 
 sys.path.insert(0, "../")
 
 
-from context_enhanced_api import getRotatedImage, getSegmentationResult, deleteFiles, deleteFolder
+from context_enhanced_api import getRotatedImage, getSegmentationResult, deleteFiles, deleteFolder, makeMask, getContextExtendedMask_helper, getContextDeprivedMask_helper
 
 # Test 1
 class TestGetSegmentationResult(unittest.TestCase):
@@ -114,6 +115,74 @@ class TestDeleteFolder(unittest.TestCase):
 
         # Assert that the folder no longer exists
         self.assertFalse(os.path.exists(self.temp_dir))
+
+# Test 5
+class TestMakeMask(unittest.TestCase):
+    def test_makeMask(self):
+        # Create a test image with black pixels
+        img = np.zeros((100, 100), dtype=np.uint8)
+
+        # Call the makeMask function
+        mask = makeMask(img)
+
+        # Assert that the mask has the expected dimensions
+        self.assertEqual(mask.shape, (100, 100, 4))
+
+        # Assert that the green and blue channels are set to 0 for all pixels
+        self.assertTrue(np.all(mask[:, :, 1:] == 0))
+
+        # Assert that the red channel is set to 255 for pixels with value 1 in img
+        self.assertTrue(np.all(mask[:, :, 2] == img))
+
+        # Assert that the alpha channel is correctly computed
+        alpha = np.where(img == 0, 0, 255).astype('uint8')
+        self.assertTrue(np.all(mask[:, :, 3] == alpha))
+
+# Test 6
+class TestGetContextExtendedMaskHelper(unittest.TestCase):
+    def setUp(self):
+        # Define input data
+        self.root_path = "../tests/images/"
+        self.image_name = "test_cem_helper.jpg"
+        self.helpered_image = "test_cem_helpered_image.png"
+
+    def test_getContextExtendedMask_helper(self):
+        # Define expected output
+        expected_output = cv2.imread(self.root_path + self.helpered_image, cv2.COLOR_BGR2GRAY)
+
+        # Call the function
+        output = getContextExtendedMask_helper(self.image_name, self.root_path)
+
+        # Assert the output matches the expected output
+        self.assertEqual(output[0].numpy().all(), expected_output.all())
+
+    def tearDown(self):
+        # Clean up the test image and rotated image
+        os.remove(self.root_path + self.image_name)
+        os.remove(self.root_path + self.helpered_image)
+
+# Test 7
+class TestGetContextDeprivedMaskHelper(unittest.TestCase):
+    def setUp(self):
+        # Define input data
+        self.root_path = "../tests/images/"
+        self.image_name = "test_cdm_helper.jpg"
+        self.helpered_image = "test_cdm_helpered_image.png"
+
+    def test_getContextExtendedMask_helper(self):
+        # Define expected output
+        expected_output = cv2.imread(self.root_path + self.helpered_image, cv2.COLOR_BGR2GRAY)
+
+        # Call the function
+        output = getContextDeprivedMask_helper(self.image_name, self.root_path)
+
+        # Assert the output matches the expected output
+        self.assertEqual(output[0].numpy().all(), expected_output.all())
+
+    def tearDown(self):
+        # Clean up the test image and rotated image
+        os.remove(self.root_path + self.image_name)
+        os.remove(self.root_path + self.helpered_image)
 
 if __name__ == '__main__':
     unittest.main()

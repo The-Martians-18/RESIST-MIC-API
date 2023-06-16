@@ -453,3 +453,47 @@ class TestGetSegmentationResult(TestCase):
     def tearDown(self):
         # Clean up the test image and rotated image
         os.remove(self.root + self.segmented_image)
+
+class TestGetContextExtendedMaskHelper(TestCase):
+    def setUp(self):
+        # Define input data
+        self.root_path = "api/tests/images/"
+        self.image_name = "test_cem_helper.jpg"
+        self.helpered_image = "test_cem_helpered_image.png"
+
+    def test_getContextExtendedMask_helper(self):
+        # Define expected output
+        expected_output = cv2.imread(self.root_path + self.helpered_image, cv2.COLOR_BGR2GRAY)
+
+        # Call the function
+        output = context_enhanced_api.getContextExtendedMask_helper(self.image_name, self.root_path)
+
+        # Assert the output matches the expected output
+        self.assertEqual(output[0].numpy().all(), expected_output.all())
+
+    def tearDown(self):
+        # Clean up the test image and rotated image
+        os.remove(self.root_path + self.image_name)
+        os.remove(self.root_path + self.helpered_image)
+
+class TestGetContextDeprivedMaskHelper(TestCase):
+    def setUp(self):
+        # Define input data
+        self.root_path = "api/tests/images/"
+        self.image_name = "test_cdm_helper.jpg"
+        self.helpered_image = "test_cdm_helpered_image.png"
+
+    def test_getContextExtendedMask_helper(self):
+        # Define expected output
+        expected_output = cv2.imread(self.root_path + self.helpered_image, cv2.COLOR_BGR2GRAY)
+
+        # Call the function
+        output = context_enhanced_api.getContextDeprivedMask_helper(self.image_name, self.root_path)
+
+        # Assert the output matches the expected output
+        self.assertEqual(output[0].numpy().all(), expected_output.all())
+
+    def tearDown(self):
+        # Clean up the test image and rotated image
+        os.remove(self.root_path + self.image_name)
+        os.remove(self.root_path + self.helpered_image)
