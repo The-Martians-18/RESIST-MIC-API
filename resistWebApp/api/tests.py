@@ -68,7 +68,7 @@ class ImageViewTests(TestCase):
             "error": "Image not found. Invalid image ID."
         }
 
-        # Mock the getImageDetails function to return the expected responses
+        # Mock the getImage function to return the expected responses
         mock_get_image.side_effect = [valid_expected_response, invalid_expected_response]
 
         # Test for valid image ID
@@ -92,16 +92,21 @@ class ImageViewTests(TestCase):
         valid_image_id = "ESP_072116_1740"
         invalid_image_id = "ESP_072116_1940"
 
-        valid_expected_response = HttpResponse(b'', content_type='image/jpeg')
+        valid_expected_response = HttpResponse(b'', content_type='image/png')
 
         invalid_expected_response = {
             "error": "Image not found. Invalid image ID."
         }
 
-        # Mock the getImageDetails function to return the expected responses
+        # Mock the getImageSegmentation function to return the expected responses
         mock_get_image_segmentation.side_effect = [valid_expected_response, invalid_expected_response]
 
         # Test for valid image ID
+        valid_url = reverse('get_image_segmentation', args=[valid_image_id])
+        valid_response = self.client.get(valid_url)
+
+        self.assertEqual(valid_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(valid_response['Content-Type'], valid_expected_response['Content-Type'])
 
         # Test for invalid image ID
         invalid_url = reverse('get_image_segmentation', args=[invalid_image_id])
@@ -327,31 +332,7 @@ class ImageHelpersTestCase(TestCase):
         link = imageHelpers.getImgLink(id)
 
         self.assertEqual(link, expected_link)
-    
-    
-#     def test_collectImageIds(self):
-#         htmlString = str('''<div class="milo-container-en">
-# <div class="page-labels">Search Results </div>
-# <!-- begin the thumbnail table --><table align="center" border="0" cellpadding="0" cellspacing="16" width="972"><tr><td align="center" class="catalog-cell-images" valign="top" width="243"><a href="ESP_047869_1810"><img alt="Contrasting Thermal Inertia Unit" border="0" height="117" src="https://static.uahirise.org/images/2016/thumb/ESP_047869_1810.jpg" width="172"/></a><br/><a class (ESP_047869_1810) </a><br/>Lat: 0.9° Long: 7.7°<td align="center" class="catalog-cell-images" valign="top" width="243"><a href=" border="0" height="117" src="https://static.uahirise.org/images/2016/thumb/ESP_045311_1810.jpg" width="172"/></a><br/><a class (ESP_045311_1810) </a><br/>Lat: 0.9° Long: 7.2°<td align="center" class="catalog-cell-images" valign="top" width="243"><a href=" border="0" height="117" src="https://static.uahirise.org/images/2012/thumb/ESP_028630_1805.jpg" width="172"/></a><br/><a class (ESP_028630_1805) </a><br/>Lat: 0.7° Long: 7.4°<td align="center" class="catalog-cell-images" valign="top" width="243"><a href=" border="0" height="117" src="https://static.uahirise.org/images/2012/thumb/ESP_028564_1805.jpg" width="172"/></a><br/><a class (ESP_028564_1805) </a><br/>Lat: 0.7° Long: 7.4°</td></td></td></td></tr><tr><td align="center" class="catalog-cell-images" valign="top" width="243"><a href="PSP_001374_1805"><img alt="Layering in an Exhumed Crater at Meridiani Planum" border="0" height="117" src="https://static.uahirise.org/images/2010/thumb/PSP_001374_1805.jpg" width="172"/></a><br/><a class="cells" href="PSP_001374_1805">Layering in an Exhumed Crater at Meridiani Planum (PSP_001374_1805) </a><br/>Lat: 0.7° Long: 7.4°</td></tr><tr><td align="left" valign="top" width="243"><br/>  <br/><br/></td><td align="center" class="page-numbers" colspan="2" valign="top"><br/>Page 1 of 1 pages (5 images)<br/><br/></td><td align="right" valign="top" width="243"><br/>  <br/><br/></td></tr> </table>       
-# <!-- end the thumbnail table -->
-# </div>''')
 
-#         expected_uniqueImageIds = [
-#             'ESP_028564_1805', 'ESP_028630_1805', 'ESP_045311_1810', 'ESP_047869_1810', 'PSP_001374_1805'
-#         ]
-
-#         expected_uniqueImageThumbnails = [
-#             'https://static.uahirise.org/images/2010/thumb/PSP_001374_1805.jpg',
-#             'https://static.uahirise.org/images/2012/thumb/ESP_028564_1805.jpg',
-#             'https://static.uahirise.org/images/2012/thumb/ESP_028630_1805.jpg',
-#             'https://static.uahirise.org/images/2016/thumb/ESP_045311_1810.jpg',
-#             'https://static.uahirise.org/images/2016/thumb/ESP_047869_1810.jpg'
-#         ]
-
-#         uniqueImageIds, uniqueImageThumbnails = imageHelpers.collectImageIds(htmlString)
-
-#         self.assertEqual(uniqueImageIds, expected_uniqueImageIds)
-#         self.assertEqual(uniqueImageThumbnails, expected_uniqueImageThumbnails)
 
 # Test 1
 class TestDeleteFiles(TestCase):

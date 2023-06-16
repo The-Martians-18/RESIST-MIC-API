@@ -482,6 +482,7 @@ def getSkeletalPieceCoordinatesToConnect(lists):
     connections = []
     for pair, (distance, coords) in distances.items():
         list1, list2 = pair
+        # if distance < 200 and (not isConnected(lists.index(list(list1)), lists.index(list(list2)), connections)):
         if distance < 250:
             connections.append([lists.index(list(list1)), lists.index(list(list2))])
             coordinatesToConnect.append(list(coords))
