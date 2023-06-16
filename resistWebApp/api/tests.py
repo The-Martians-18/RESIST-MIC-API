@@ -406,9 +406,12 @@ class TestDeleteFolder(TestCase):
 class TestGetRotatedImage(TestCase):
 
     def setUp(self):
+        self.source = "api/tests/testImages/"
         self.root = "api/tests/images/"
         self.test_image = "test_rotation.jpg"
         self.rotated_image = "test_rotated_image.jpg"
+        shutil.copy(self.source + self.test_image, self.root + self.test_image)
+        shutil.copy(self.source + self.rotated_image, self.root + self.rotated_image)
 
     def test_getRotatedImage(self):
 
@@ -428,9 +431,12 @@ class TestGetRotatedImage(TestCase):
 class TestGetSegmentationResult(TestCase):
 
     def setUp(self):
+        self.source = "api/tests/testImages/"
         self.root = "api/tests/images/"
         self.test_image = "test_segmentation.jpg"
         self.segmented_image = "segmented_image.png"
+        shutil.copy(self.source + self.test_image , self.root + self.test_image)
+        shutil.copy(self.source + self.segmented_image, self.root + self.segmented_image)
 
     def test_getSegmentationResult(self):
 
@@ -457,9 +463,12 @@ class TestGetSegmentationResult(TestCase):
 class TestGetContextExtendedMaskHelper(TestCase):
     def setUp(self):
         # Define input data
+        self.source = "api/tests/testImages/"
         self.root_path = "api/tests/images/"
         self.image_name = "test_cem_helper.jpg"
         self.helpered_image = "test_cem_helpered_image.png"
+        shutil.copy(self.source + self.image_name, self.root_path + self.image_name)
+        shutil.copy(self.source + self.helpered_image, self.root_path + self.helpered_image)
 
     def test_getContextExtendedMask_helper(self):
         # Define expected output
@@ -479,9 +488,12 @@ class TestGetContextExtendedMaskHelper(TestCase):
 class TestGetContextDeprivedMaskHelper(TestCase):
     def setUp(self):
         # Define input data
+        self.source = "api/tests/testImages/"
         self.root_path = "api/tests/images/"
         self.image_name = "test_cdm_helper.jpg"
         self.helpered_image = "test_cdm_helpered_image.png"
+        shutil.copy(self.source + self.image_name, self.root_path + self.image_name)
+        shutil.copy(self.source + self.helpered_image, self.root_path + self.helpered_image)
 
     def test_getContextExtendedMask_helper(self):
         # Define expected output
